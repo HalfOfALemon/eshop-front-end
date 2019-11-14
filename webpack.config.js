@@ -45,6 +45,27 @@ var config = {
           /*'style-loader',*//*这个打开会报错*/
           'css-loader'
         ]
+      },
+      // 实现 url 资源打包
+      {
+        // 图片和字体文件使用 url-loader 来处理
+        test: /\.(png|jpg|gif|ttf|eot|woff|woff2|svg)\??.*$/,
+        use: [
+            {
+                loader: 'url-loader',
+                // options 为可以配置的选项
+                options: {
+                    limit: 8192,
+                    // limit=8192表示将所有小于8kb的图片都转为base64形式（为什么呢？因为一个很小的图片，不值当的去发送一个请求，减少请求次                               数。）
+                    // （其实应该说超过8kb的才使用 url-loader 来映射到文件，否则转为dataurl形式）
+
+                    //[name].[ext]：设定图片按照本来的文件名和扩展名打包，不用进行额外编码
+                    name:'resource/[name].[ext]'
+                }
+            }
+      ]
+       //保证输出的图片名称与之前命名的图片名称保持一致(目前只是支持这样的写法，webpack3 没有响应的options进行配置)
+     // use:'url-loader?limit=8192&name=imgs/[name].[ext]' 
       }
     ]
   },
